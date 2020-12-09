@@ -3,15 +3,27 @@ import numpy as np
 import os
 import cv2
 import shutil
+import glob
 
 
-img_path = 'E:/class_hexin/projectII_face_keypoints_detection/data.zip/data/II/'
-lab_path = 'E:/class_hexin/projectII_face_keypoints_detection/data.zip/data/data2_label.txt'
+img_path = 'E:/code/case1/data/I/'
+lab_path = 'E:/code/case1/facelandmark/landmark.txt'
 save_path = 'E:/class_hexin/projectII_face_keypoints_detection/data.zip/data/result/'
-data_path = 'E:/class_hexin/projectII_face_keypoints_detection/data.zip/data/data_2/'
+data_path = 'E:/code/case1/data/data_end/'
+end_lab = 'E:/code/case1/facelandmark/label.txt'
+def data_prepare(data_path, lab_path, end_lab):
+    f = open(lab_path, 'r')
+    img_names = os.listdir(img_path)
+    lab_mark = open(lab_path).read().strip().split('\n')
+    landmark_f = open(end_lab, 'w+')
+    for landmark in lab_mark:
+        lab_infor = landmark.split()
+        lab_infor[0] = data_path + lab_infor[0]
+        for temp in lab_infor:
+            landmark_f.write(temp + ' ')
+        landmark_f.write('\n')
 
-def data_prepare(img_path, lab_path, train_lab, test_lab):
-    print('ok')
+        
 
 def show_landmark(img_path, lab_path, save_path):
     if not os.path.exists(save_path):
@@ -124,8 +136,8 @@ def main():
     # check_landmark(img_path, lab_path)
     # check_landmark1(img_path, 'data2.txt', save_path)
     # show_landmark(img_path, 'data2_endlandmark.txt', save_path)
-    copy_img_by_landmark(img_path, 'data2_endlandmark.txt', data_path)
-    # data_prepare(img_path, lab_path, train_lab, test_lab)
+    # copy_img_by_landmark(img_path, 'data1_endlandmark.txt', data_path)
+    data_prepare(data_path, lab_path, end_lab)
 
 if __name__=='__main__':
     main()
