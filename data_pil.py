@@ -5,6 +5,44 @@ from torch.utils.data import Dataset
 from PIL import Image
 
 
+train_boarder = 112
+
+def channel_norm(img):
+    mean = np.mean(img)
+    std = np.std(img)
+    pixels = (img - mean) / (std + 0.000000001)
+    return pixels
+
+
+class Normalize(object):
+    '''
+    resize Image to train_boarder * train_boarder. Here we use 112 * 112
+    then do channel normalizations:(image - mean)/sta_variation
+    '''
+    def __call__(self, sample):
+        image,landmarks = sample['image'], sample['landmarks']
+        image_resize = np.asarray(image.resize((train_boarder, train_boarder), Image.BILINEAR),
+                                dtype=np.float32) #Image的resize并转换成array
+        image = channel_norm(image_resize)
+        return {'image': image, 'landmarks': landmarks}
+        
+
+class ToTensor(object):
+    '''
+    Convert arrays in sample to Tensor.
+    Tensor channel sequence : N * C * H * W
+    '''
+    def __call__(self, sample):
+        image, landmarks = sample['image'], sample['landmarks']
+        # numpy image: h*w*c
+        # torch image:c*h*w
+        # array的转置
+        image = image.transpose((2,0,1)) 
+        image = np.expand_dims(image, axis=0)
+        return {'image':torch.from_numpy(image),
+                'landmarks': torch.from_numpy(landmarks)}
+
+
 
 
 def load_data(phase):
