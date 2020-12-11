@@ -14,6 +14,23 @@ def channel_norm(img):
     return pixels
 
 
+class FaceLandmarksDataset(Dataset):
+    def __init__(self, src_lines, transform=None):
+        self.lines = src_lines
+        self.transform = transform
+    
+    def __len__(self):
+        return len(self.lines)
+    
+    def __getitem__(self, idx):
+        img_name, rext, landmarks = parse_line(self.line[idx])
+        
+
+
+
+
+
+
 class Normalize(object):
     '''
     resize Image to train_boarder * train_boarder. Here we use 112 * 112
@@ -36,13 +53,14 @@ class ToTensor(object):
         image, landmarks = sample['image'], sample['landmarks']
         # numpy image: h*w*c
         # torch image:c*h*w
+
         # array的转置
         image = image.transpose((2,0,1)) 
-        image = np.expand_dims(image, axis=0)
+        # torch : batch_size * c * h * w
+        # 因此需要在array前面加一个通道
+        image = np.expand_dims(image, axis=0) 
         return {'image':torch.from_numpy(image),
                 'landmarks': torch.from_numpy(landmarks)}
-
-
 
 
 def load_data(phase):
@@ -67,6 +85,7 @@ def get_train_test_data():
     train_set = load_data('train')
     test_set = load_data('test')
     return train_set, test_set
+
 
 def main():
     # TODO
