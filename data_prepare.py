@@ -7,13 +7,13 @@ import glob
 
 
 img_path = 'E:/code/case1/data/I/'
-lab_path = 'E:/code/case1/facelandmark/landmark.txt'
+lab_path = 'landmark.txt'
 save_path = 'E:/class_hexin/projectII_face_keypoints_detection/data.zip/data/result/'
-data_path = 'E:/code/case1/data/data_end/'
-end_lab = 'E:/code/case1/facelandmark/label.txt'
+data_path = 'E:\class_hexin\projectII_face_keypoints_detection\data\data/'
+end_lab = 'label_pc.txt'
 def data_prepare(data_path, lab_path, end_lab):
     f = open(lab_path, 'r')
-    img_names = os.listdir(img_path)
+    # img_names = os.listdir(img_path)
     lab_mark = open(lab_path).read().strip().split('\n')
     landmark_f = open(end_lab, 'w+')
     for landmark in lab_mark:
